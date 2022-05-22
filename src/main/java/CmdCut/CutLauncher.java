@@ -1,10 +1,10 @@
 /*
 Вариант 8 -- cut
 Выделение из каждой строки текстового файла некоторой подстроки:
-● file задаёт имя входного файла. Если параметр отсутствует, следует считывать
+● -i file задаёт имя входного файла. Если параметр отсутствует, следует считывать
 входные данные с консольного ввода;+
 ● Флаг -o ofile задаёт имя выходного файла (в данном случае ofile). Если
-параметр отсутствует, следует выводить результат на консольный вывод.
+параметр отсутствует, следует выводить результат на консольный вывод.+
 ● Флаг -с означает, что все числовые параметры задают отступы в символах
 (буквах) входного файла.
 ● Флаг -w означает, что все числовые параметры задают отступы в словах (т.е.
@@ -58,11 +58,12 @@ public class CutLauncher {
         try {
             parser.parseArgument(args);
             if (!(indentChar || indentWord)) throw new IllegalArgumentException("-c or -w is required");
-            if (!Pattern.matches("\\d+-\\d*", range)) throw new IllegalArgumentException("wrong range");
+            if (!Pattern.matches("\\d+-\\d*", range)) throw new IllegalArgumentException("incorrect range");
             int[] intRange = Arrays.stream(range.split("-")).mapToInt(Integer::parseInt).toArray();
             if (intRange[0] == 0 || (intRange.length == 2 && intRange[0] > intRange[1]))
                 throw new IllegalArgumentException("incorrect range");
             Cutter cutter = new Cutter(indentWord, intRange[0], intRange.length == 2 ? intRange[1] : 0, outFile, inFile);
+            cutter.start();
         } catch (CmdLineException | IllegalArgumentException e) {
             System.err.println(e.getMessage());
             System.err.println("java -jar cutter.jar [-c|-w] [-i infile] [-o oFile] range");
