@@ -43,7 +43,7 @@ public class Cutter {
     }
 
     private String cutWords(String line) {
-        List<String> list = Arrays.stream(line.split(" ")).toList();
+        List<String> list = Arrays.asList(line.split(" "));
         if (list.size() < begin) return "";
         return list.subList(begin - 1, end == 0 || end > list.size() ? list.size() : end)
                 .stream().sequential().collect(Collectors.joining(" "));
