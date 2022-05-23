@@ -3,7 +3,6 @@ package CmdCut;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,8 +74,10 @@ class CutLauncherTest {
     @Test
     public void oneCorrect() throws IOException {
         File file = setUp();
+        File temp = File.createTempFile("tempL-", ".txt");
+        temp.deleteOnExit();
         String path = classloader.getResource("inputs/1_text.txt").getPath();
-        CutLauncher.main(("-w -i " + path + " 3-5").split(" "));
+        CutLauncher.main(("-w -i " + path + " -o " + temp.getPath() + " 3-5").split(" "));
         assertFileEmpty(file);
     }
 }
