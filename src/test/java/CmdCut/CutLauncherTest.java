@@ -80,4 +80,14 @@ class CutLauncherTest {
         CutLauncher.main(("-w -i " + path + " -o " + temp.getPath() + " 3-5").split(" "));
         assertFileEmpty(file);
     }
+
+    @Test
+    public void twoCorrect() throws IOException {
+        File file = setUp();
+        File temp = File.createTempFile("tempL-", ".txt");
+        temp.deleteOnExit();
+        String path = classloader.getResource("inputs/1_text.txt").getPath();
+        CutLauncher.main(("-c -i " + path + " -o " + temp.getPath() + " 3-").split(" "));
+        assertFileEmpty(file);
+    }
 }

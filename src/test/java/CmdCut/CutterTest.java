@@ -21,7 +21,7 @@ class CutterTest {
             e.printStackTrace();
         }
         assertNotNull(expected);
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -41,6 +41,16 @@ class CutterTest {
         File temp = File.createTempFile("temp-", ".txt");
         temp.deleteOnExit();
         new Cutter(Cutter.Indent.WORD, 4, 11, temp.getAbsolutePath(), input.getAbsolutePath()).start();
+        assertFileContent(temp, expected);
+    }
+
+    @Test
+    public void testRange() throws IOException {
+        File input = new File(classloader.getResource("inputs/2_text.txt").getFile());
+        File expected = new File(classloader.getResource("outputs/3_otext.txt").getFile());
+        File temp = File.createTempFile("temp-", ".txt");
+        temp.deleteOnExit();
+        new Cutter(Cutter.Indent.WORD, 4, 0, temp.getAbsolutePath(), input.getAbsolutePath()).start();
         assertFileContent(temp, expected);
     }
 }
