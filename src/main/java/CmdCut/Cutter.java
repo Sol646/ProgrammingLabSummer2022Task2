@@ -19,16 +19,15 @@ public class Cutter {
         this.end = end;
 
         try {
-            input = new Scanner(new BufferedReader(new FileReader(inFile)));
+            input = inFile.isBlank() ? new Scanner(System.in) : new Scanner(new BufferedReader(new FileReader(inFile)));
         } catch (FileNotFoundException | NullPointerException e) {
-            System.out.println("Please use \\n in the end of copied line to provide correct work");
-            input = new Scanner(System.in);
+            System.out.println(e.getMessage());
         }
 
         try {
-            output = new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
+            output = outFile.isBlank() ? System.out : new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
         } catch (FileNotFoundException | NullPointerException e) {
-            output = System.out;
+            System.out.println(e.getMessage());
         }
     }
 

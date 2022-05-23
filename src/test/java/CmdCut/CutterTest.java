@@ -29,9 +29,9 @@ class CutterTest {
         File input = new File(classloader.getResource("inputs/1_text.txt").getFile());
         File expected = new File(classloader.getResource("outputs/1_otext.txt").getFile());
         File temp = File.createTempFile("temp-", ".txt");
+        temp.deleteOnExit();
         new Cutter(false, 5, 13, temp.getAbsolutePath(), input.getAbsolutePath()).start();
         assertFileContent(temp, expected);
-        temp.deleteOnExit();
     }
 
     @Test
@@ -39,8 +39,8 @@ class CutterTest {
         File input = new File(classloader.getResource("inputs/2_text.txt").getFile());
         File expected = new File(classloader.getResource("outputs/2_otext.txt").getFile());
         File temp = File.createTempFile("temp-", ".txt");
+        temp.deleteOnExit();
         new Cutter(true, 4, 11, temp.getAbsolutePath(), input.getAbsolutePath()).start();
         assertFileContent(temp, expected);
-        temp.deleteOnExit();
     }
 }
