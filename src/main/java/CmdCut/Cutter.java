@@ -7,27 +7,31 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Cutter {
-    private final boolean indentWord;
+    private final Indent indent;
     private final int begin;
     private final int end;
-    private PrintStream output;
-    private Scanner input;
+    private final PrintStream output;
+    private final Scanner input;
+    public enum Indent {
+        WORD,
+        CHAR
+    }
 
-    public Cutter(boolean indentWord, int begin, int end, String outFile, String inFile) {
-        this.indentWord = indentWord;
+    public Cutter(Indent indent, int begin, int end, String outFile, String inFile) {
+        this.indent = indent;
         this.begin = begin;
         this.end = end;
 
         try {
-            input = inFile.isBlank() ? new Scanner(System.in) : new Scanner(new BufferedReader(new FileReader(inFile)));
+            input = inFile == null ? new Scanner(System.in) : new Scanner(new BufferedReader(new FileReader(inFile)));
         } catch (FileNotFoundException | NullPointerException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException("Input file error: " + e.getMessage());
         }
 
         try {
-            output = outFile.isBlank() ? System.out : new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
+            output = outFile == null ? System.out : new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
         } catch (FileNotFoundException | NullPointerException e) {
-            System.out.println(e.getMessage());
+            throw new IllegalArgumentException("Output file error: " + e.getMessage());
         }
     }
 
@@ -35,7 +39,7 @@ public class Cutter {
         String line;
         while (input.hasNextLine()) {
             line = input.nextLine();
-            output.println(indentWord ? cutWords(line) : cutChars(line));
+            output.println(indent == Indent.WORD ? cutWords(line) : cutChars(line));
         }
         input.close();
         output.close();

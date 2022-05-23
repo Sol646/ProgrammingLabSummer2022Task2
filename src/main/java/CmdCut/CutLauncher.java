@@ -56,19 +56,26 @@ public class CutLauncher {
 
     private void launch(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
+        int[] intRange;
         try {
             parser.parseArgument(args);
             if (!(indentChar || indentWord)) throw new IllegalArgumentException("-c or -w is required");
             if (!Pattern.matches("\\d+-\\d*", range)) throw new IllegalArgumentException("incorrect range");
-            int[] intRange = Arrays.stream(range.split("-")).mapToInt(Integer::parseInt).toArray();
+            intRange = Arrays.stream(range.split("-")).mapToInt(Integer::parseInt).toArray();
             if (intRange[0] == 0 || (intRange.length == 2 && intRange[0] > intRange[1]))
                 throw new IllegalArgumentException("incorrect range");
-            Cutter cutter = new Cutter(indentWord, intRange[0], intRange.length == 2 ? intRange[1] : 0, outFile, inFile);
-            cutter.start();
         } catch (CmdLineException | IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            System.err.println("java -jar cutter.jar [-c|-w] [-i infile] [-o oFile] range");
+            System.err.println("java -jar cutter.jar [-c|-w] [-i inFile] [-o oFile] range");
             parser.printUsage(System.err);
+            return;
+        }
+        try {
+            Cutter cutter = new Cutter(indentWord ? Cutter.Indent.WORD : Cutter.Indent.CHAR,
+                    intRange[0], intRange.length == 2 ? intRange[1] : 0, outFile, inFile);
+            cutter.start();
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
         }
     }
 }
